@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-night: #0b1026;
+  --color-dusk: #1b2457;
+  --color-moon: #f2e9d0;
+  --color-aurora: #5fd1c4;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+
+  /* Shooting star: crosses the screen during the first ~14% of the cycle,
+     then stays hidden until the loop repeats. Set the cycle length with
+     animation-duration on each element. */
+  --animate-shoot: shoot 24s linear infinite;
+  @keyframes shoot {
+    0%   { transform: translate(-20vw, 0) rotate(20deg); opacity: 0; }
+    2%   { opacity: 1; }
+    14%  { transform: translate(120vw, 40vh) rotate(20deg); opacity: 1; }
+    16%, 100% { transform: translate(120vw, 40vh) rotate(20deg); opacity: 0; }
+  }
+}
+
+@layer components {
+  /* Dashed box that stands in for a GIF. Replace with <img> later. */
+  .gif-slot {
+    @apply flex items-center justify-center rounded-xl border border-dashed
+           border-moon/30 bg-moon/5 text-center text-xs text-moon/50;
+  }
+
+  /* Round, glassy nav button with a label underneath */
+  .orb {
+    @apply flex w-32 flex-col items-center gap-3 text-center outline-none;
+  }
+  .orb-disc {
+    @apply flex size-24 items-center justify-center rounded-full border
+           border-moon/30 bg-dusk/60 text-moon backdrop-blur transition
+           duration-200 group-hover:scale-105 group-hover:border-aurora
+           group-hover:text-aurora group-focus-visible:ring-2
+           group-focus-visible:ring-aurora group-focus-visible:ring-offset-2
+           group-focus-visible:ring-offset-night;
+  }
+  .orb-label {
+    @apply font-medium text-moon;
+  }
+}

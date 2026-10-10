@@ -1,16 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vite + Tailwind App</title>
-  <link rel="stylesheet" href="/src/style.css">
-</head>
-<body>
-  <div class="flex min-h-screen items-center justify-center bg-slate-100">
-    <h1 class="text-4xl font-bold text-blue-600 drop-shadow">
-      Tailwind and Vite are running!
-    </h1>
-  </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nightwatch · Stargazing</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" src="/src/main.js"></script>
+  </head>
+
+  <body class="bg-night font-sans text-moon">
+    <main
+      class="relative min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_30%_20%,#1b2457_0%,#0b1026_55%,#05070f_100%)]"
+    >
+      <!-- ============ BACKGROUND GIF PLACEHOLDERS ============
+           To use a real GIF, swap a slot for:
+           <img src="/gifs/your-file.gif" alt="" class="absolute ... " />
+           Keep alt="" since they're decorative. -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+        <!-- Shooting stars: fly across periodically. Different durations and
+             delays keep them from syncing up. -->
+        <div class="absolute left-0 top-[8%] motion-reduce:hidden">
+          <div class="gif-slot h-12 w-24 animate-shoot" style="animation-duration: 22s; animation-delay: 3s">shooting star</div>
+        </div>
+        <div class="absolute left-0 top-[35%] motion-reduce:hidden">
+          <div class="gif-slot h-12 w-24 animate-shoot" style="animation-duration: 31s; animation-delay: 12s">shooting star</div>
+        </div>
+        <div class="absolute left-0 top-[60%] motion-reduce:hidden">
+          <div class="gif-slot h-12 w-24 animate-shoot" style="animation-duration: 27s; animation-delay: 20s">shooting star</div>
+        </div>
+
+        <!-- Constellations -->
+        <div class="gif-slot absolute right-[18%] top-[9%] hidden h-28 w-40 sm:flex">constellation</div>
+        <div class="gif-slot absolute bottom-[14%] left-[40%] h-28 w-40">constellation</div>
+
+        <!-- Planets -->
+        <div class="gif-slot absolute left-[7%] top-[44%] hidden size-24 rounded-full sm:flex">planet</div>
+        <div class="gif-slot absolute bottom-[8%] right-[10%] size-28 rounded-full">planet</div>
+
+        <!-- Stars -->
+        <div class="gif-slot absolute left-[38%] top-[6%] size-16">stars</div>
+        <div class="gif-slot absolute right-[32%] top-[64%] hidden size-16 md:flex">stars</div>
+        <div class="gif-slot absolute left-[22%] top-[24%] hidden size-14 md:flex">stars</div>
+      </div>
+
+      <!-- ============ NAV BUTTONS (scattered) ============ -->
+      <nav aria-label="Main">
+        <!-- Top left -->
+        <a href="/tips.html" class="orb group absolute left-5 top-5 sm:left-10 sm:top-8">
+          <span class="orb-disc">
+            <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z" />
+              <path d="M10 20.5h4" />
+            </svg>
+          </span>
+          <span class="orb-label">Tips</span>
+        </a>
+
+        <!-- Middle right -->
+        <a href="/stargazer.html" class="orb group absolute right-5 top-1/2 -translate-y-1/2 sm:right-10">
+          <span class="orb-disc">
+            <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
+              <circle cx="12" cy="10" r="2.3" />
+            </svg>
+          </span>
+          <span class="orb-label">Find dark skies</span>
+        </a>
+
+        <!-- Bottom left -->
+        <button type="button" id="events-open" class="orb group absolute bottom-5 left-5 sm:bottom-10 sm:left-16">
+          <span class="orb-disc">
+            <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="4" y="5" width="16" height="15" rx="2" />
+              <path d="M4 10h16M9 3v4M15 3v4" />
+            </svg>
+          </span>
+          <span class="orb-label">Sky events</span>
+        </button>
+      </nav>
+
+      <!-- ============ TITLE BOX ============ -->
+      <header class="relative z-10 flex min-h-screen items-center justify-center px-6">
+        <div class="max-w-xl rounded-3xl border border-moon/20 bg-night/60 px-10 py-12 text-center backdrop-blur-md">
+          <h1 class="font-display text-5xl font-semibold tracking-tight sm:text-6xl">Nightwatch</h1>
+          <p class="mx-auto mt-4 max-w-sm text-lg text-moon/75">
+            Find a dark sky near you and know what to look for when you get there.
+          </p>
+        </div>
+      </header>
+    </main>
+
+    <!-- ============ NASA EVENTS EMBED ============ -->
+    <dialog
+      id="events-dialog"
+      class="m-auto h-[min(85vh,720px)] w-[min(92vw,960px)] overflow-hidden rounded-2xl bg-night p-0 text-moon backdrop:bg-black/70"
+    >
+      <div class="flex h-12 items-center justify-between border-b border-moon/15 px-4">
+        <p class="font-medium">Upcoming sky events, from NASA</p>
+        <div class="flex items-center gap-4 text-sm">
+          <a id="events-external" href="#" target="_blank" rel="noopener" class="text-aurora underline underline-offset-4">Open on NASA.gov</a>
+          <button type="button" id="events-close" class="rounded-md border border-moon/30 px-3 py-1 hover:border-aurora hover:text-aurora">Close</button>
+        </div>
+      </div>
+      <iframe id="events-frame" title="NASA skywatching: upcoming astronomical events" class="h-[calc(100%-3rem)] w-full bg-white"></iframe>
+    </dialog>
+  </body>
 </html>
