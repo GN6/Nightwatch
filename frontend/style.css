@@ -30,7 +30,7 @@
 
   /* Round, glassy nav button with a label underneath */
   .orb {
-    @apply flex w-32 flex-col items-center gap-3 text-center outline-none;
+    @apply z-20 flex w-32 flex-col items-center gap-3 text-center outline-none;
   }
   .orb-disc {
     @apply flex size-24 items-center justify-center rounded-full border
