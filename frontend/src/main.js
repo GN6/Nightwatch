@@ -3,11 +3,15 @@ import '../style.css'
 const FEED_URL = 'https://www.astronomy.com/tags/sky-this-week/feed/'
 const SITE_URL = 'https://www.astronomy.com/tags/sky-this-week/'
 const WEEKS = 4 // "Sky This Week" is weekly, so 4 items is about a month
+const CACHE_KEY = 'sky-feed-cache'
 
 // Browsers block cross-origin requests unless the server allows them, so we
-// try the feed directly first, then fall back to public CORS proxies.
+// can't fetch the feed directly. Sources are tried in order:
+//   1. Our own Vite dev proxy (see vite.config.ts; local development only)
+//   2. Public CORS proxies
+// If all of them fail, we fall back to the last copy saved in localStorage.
 const FEED_SOURCES = [
-  (u) => u,
+  () => '/api/sky-feed',
   (u) => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
   (u) => `https://corsproxy.io/?url=${encodeURIComponent(u)}`,
 ]
@@ -21,18 +25,39 @@ external.href = SITE_URL
 
 // ---------- fetching + parsing ----------
 
+function parseFeed(text) {
+  const doc = new DOMParser().parseFromString(text, 'text/xml')
+  return doc.querySelector('parsererror') || !doc.querySelector('item') ? null : doc
+}
+
 async function fetchFeedDocument() {
   for (const build of FEED_SOURCES) {
     try {
-      const res = await fetch(build(FEED_URL))
+      const res = await fetch(build(FEED_URL), { signal: AbortSignal.timeout(8000) })
       if (!res.ok) continue
-      const doc = new DOMParser().parseFromString(await res.text(), 'text/xml')
-      if (doc.querySelector('parsererror') || !doc.querySelector('item')) continue
+      const text = await res.text()
+      const doc = parseFeed(text)
+      if (!doc) continue
+      try {
+        localStorage.setItem(CACHE_KEY, text)
+      } catch {
+        // storage unavailable: skip caching
+      }
       return doc
     } catch {
-      // network or CORS failure: try the next source
+      // timeout, network error or CORS failure: try the next source
     }
   }
+
+  // Every source failed: fall back to the last good copy, if there is one
+  try {
+    const cached = localStorage.getItem(CACHE_KEY)
+    const doc = cached && parseFeed(cached)
+    if (doc) return doc
+  } catch {
+    // ignore
+  }
+
   throw new Error('Could not load the feed')
 }
 
