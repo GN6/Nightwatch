@@ -162,3 +162,21 @@ document.getElementById('events-close').addEventListener('click', () => dialog.c
 dialog.addEventListener('click', (e) => {
   if (e.target === dialog) dialog.close()
 })
+
+// ---------- dark skies map dialog ----------
+
+const MAP_URL = '/dark-sky-map.html'
+const mapDialog = document.getElementById('map-dialog')
+const mapFrame = document.getElementById('map-frame')
+
+document.getElementById('map-open').addEventListener('click', () => {
+  if (!mapFrame.getAttribute('src')) mapFrame.src = MAP_URL // load on first open
+  mapDialog.showModal()
+})
+
+document.getElementById('map-close').addEventListener('click', () => mapDialog.close())
+
+// Clicking the dimmed backdrop closes the dialog
+mapDialog.addEventListener('click', (e) => {
+  if (e.target === mapDialog) mapDialog.close()
+})

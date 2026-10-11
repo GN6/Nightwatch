@@ -2,7 +2,13 @@
 
 PYTHON   ?= python3
 VENV     := .venv
-VPY      := $(VENV)/bin/python
+
+ifeq ($(OS),Windows_NT)
+	VPY  := $(VENV)/Scripts/python
+else
+	VPY	 := $(VENV)/bin/python
+endif
+
 STAMP    := $(VENV)/.installed
 SCRIPT   := backend/query.py
 OUTPUT   := lights.html

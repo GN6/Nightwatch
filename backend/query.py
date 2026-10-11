@@ -55,4 +55,4 @@ folium.TileLayer(
 
 m.add_ee_layer(latest, vis, f"VIIRS median {start} to {end}")
 folium.LayerControl().add_to(m)
-m.save("lights.html")
+m.save("./dark-sky-map.html")

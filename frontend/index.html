@@ -51,7 +51,7 @@
       <!-- ============ NAV BUTTONS (scattered) ============ -->
       <nav aria-label="Main">
         <!-- Top left -->
-        <a href="/tips.html" class="orb absolute left-5 top-5 sm:left-10 sm:top-8">
+        <a href="/tips.html" class="orb group absolute left-5 top-5 sm:left-10 sm:top-8">
           <span class="orb-disc">
             <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z" />
@@ -61,8 +61,8 @@
           <span class="orb-label">Tips</span>
         </a>
 
-        <!-- Middle right -->
-        <a href="/stargazer.html" class="orb absolute right-5 top-1/2 -translate-y-1/2 sm:right-10">
+        <!-- Middle right: opens the dark skies map dialog -->
+        <button type="button" id="map-open" class="orb group absolute right-5 top-1/2 -translate-y-1/2 sm:right-10">
           <span class="orb-disc">
             <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
@@ -70,10 +70,10 @@
             </svg>
           </span>
           <span class="orb-label">Find dark skies</span>
-        </a>
+        </button>
 
         <!-- Bottom left -->
-        <button type="button" id="events-open" class="orb absolute bottom-5 left-5 sm:bottom-10 sm:left-16">
+        <button type="button" id="events-open" class="orb group absolute bottom-5 left-5 sm:bottom-10 sm:left-16">
           <span class="orb-disc">
             <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="4" y="5" width="16" height="15" rx="2" />
@@ -113,6 +113,30 @@
         <ol id="events-list"></ol>
         <p class="mt-6 text-sm text-moon/50">Source: Astronomy magazine’s “Sky This Week.”</p>
       </div>
+    </dialog>
+
+    <!-- ============ DARK SKIES MAP ============ -->
+    <dialog
+      id="map-dialog"
+      aria-labelledby="map-title"
+      class="m-auto h-[min(88vh,800px)] w-[min(94vw,1100px)] overflow-hidden rounded-2xl bg-night p-0 text-moon backdrop:bg-black/70"
+    >
+      <div class="flex h-12 items-center justify-between border-b border-moon/15 px-4">
+        <p id="map-title" class="font-medium">Dark skies near you</p>
+        <button
+          type="button"
+          id="map-close"
+          aria-label="Close map"
+          class="flex size-8 items-center justify-center rounded-md border border-moon/30 hover:border-aurora hover:text-aurora"
+        >
+          ✕
+        </button>
+      </div>
+      <iframe
+        id="map-frame"
+        title="Map of areas with low light pollution"
+        class="h-[calc(100%-3rem)] w-full bg-night"
+      ></iframe>
     </dialog>
   </body>
 </html>
