@@ -51,7 +51,7 @@
       <!-- ============ NAV BUTTONS (scattered) ============ -->
       <nav aria-label="Main">
         <!-- Top left -->
-        <a href="/tips.html" class="orb group absolute left-5 top-5 sm:left-10 sm:top-8">
+        <a href="/tips.html" class="orb absolute left-5 top-5 sm:left-10 sm:top-8">
           <span class="orb-disc">
             <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2V17h5v-1.1c0-.8.4-1.5 1-2A6 6 0 0 0 12 3Z" />
@@ -62,7 +62,7 @@
         </a>
 
         <!-- Middle right -->
-        <a href="/stargazer.html" class="orb group absolute right-5 top-1/2 -translate-y-1/2 sm:right-10">
+        <a href="/stargazer.html" class="orb absolute right-5 top-1/2 -translate-y-1/2 sm:right-10">
           <span class="orb-disc">
             <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z" />
@@ -73,7 +73,7 @@
         </a>
 
         <!-- Bottom left -->
-        <button type="button" id="events-open" class="orb group absolute bottom-5 left-5 sm:bottom-10 sm:left-16">
+        <button type="button" id="events-open" class="orb absolute bottom-5 left-5 sm:bottom-10 sm:left-16">
           <span class="orb-disc">
             <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect x="4" y="5" width="16" height="15" rx="2" />
@@ -95,19 +95,24 @@
       </header>
     </main>
 
-    <!-- ============ NASA EVENTS EMBED ============ -->
+    <!-- ============ SKY EVENTS (Astronomy.com "Sky This Week" feed) ============ -->
     <dialog
       id="events-dialog"
-      class="m-auto h-[min(85vh,720px)] w-[min(92vw,960px)] overflow-hidden rounded-2xl bg-night p-0 text-moon backdrop:bg-black/70"
+      aria-labelledby="events-title"
+      class="m-auto h-[min(85vh,720px)] w-[min(92vw,720px)] overflow-hidden rounded-2xl bg-night p-0 text-moon backdrop:bg-black/70"
     >
       <div class="flex h-12 items-center justify-between border-b border-moon/15 px-4">
-        <p class="font-medium">Upcoming sky events, from NASA</p>
+        <p id="events-title" class="font-medium">Sky events this month</p>
         <div class="flex items-center gap-4 text-sm">
-          <a id="events-external" href="#" target="_blank" rel="noopener" class="text-aurora underline underline-offset-4">Open on NASA.gov</a>
+          <a id="events-external" href="#" target="_blank" rel="noopener" class="text-aurora underline underline-offset-4">More on Astronomy.com</a>
           <button type="button" id="events-close" class="rounded-md border border-moon/30 px-3 py-1 hover:border-aurora hover:text-aurora">Close</button>
         </div>
       </div>
-      <iframe id="events-frame" title="NASA skywatching: upcoming astronomical events" class="h-[calc(100%-3rem)] w-full bg-white"></iframe>
+      <div class="h-[calc(100%-3rem)] overflow-y-auto px-5 py-6 sm:px-8">
+        <p id="events-status" role="status" class="text-moon/75"></p>
+        <ol id="events-list"></ol>
+        <p class="mt-6 text-sm text-moon/50">Source: Astronomy magazine’s “Sky This Week.”</p>
+      </div>
     </dialog>
   </body>
 </html>
