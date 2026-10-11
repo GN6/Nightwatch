@@ -1,3 +1,6 @@
+.env
 frontend/node_modules
 frontend/package-lock.json
 backend/serviceAccountKey.json
+
+**/**/dark-sky-map.html
