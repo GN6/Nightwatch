@@ -5,14 +5,9 @@ import { resolve } from 'node:path'
 export default defineConfig({
   plugins: [tailwindcss()],
     server: {
-    proxy: {
-      // The browser asks /api/sky-feed; Vite fetches the real feed for it
-      '/api/sky-feed': {
-        target: 'https://www.astronomy.com',
-        changeOrigin: true,
-        rewrite: () => '/tags/sky-this-week/feed/',
-      },
-    },
+  proxy: {
+    '/api': 'http://localhost:8000',
+  },
   },
   build: {
     // Needed so `npm run build` includes every page, not just index.html.
