@@ -46,7 +46,7 @@
         <!-- Asteroids -->
         <img src="/src/assets/asteroid1.png" alt="" draggable="false" class="absolute bottom-[18%] right-[24%] hidden w-20 sm:block" />
         <img src="/src/assets/asteroid2.png" alt="" draggable="false" class="absolute bottom-[10%] left-[26%] w-10 sm:w-12" />
-        <img src="/src/assets/asteroid3.png" alt="" draggable="false" class="absolute right-[6%] top-[14%] hidden w-14 sm:block" />
+        <img src="/src/assets/asteroid3.png" alt="" draggable="false" class="absolute right-[6%] top-[26%] hidden w-14 sm:block" />
       </div>
 
       <!-- ============ NAV BUTTONS (scattered) ============ -->
@@ -82,6 +82,16 @@
             </svg>
           </span>
           <span class="orb-label">Sky events</span>
+        </button>
+
+        <!-- Top right: opens the interactive star map dialog -->
+        <button type="button" id="starmap-open" class="orb group absolute right-5 top-5 sm:right-10 sm:top-8">
+          <span class="orb-disc">
+            <svg class="size-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="m12 3 2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.5 6.6 19.5l1.2-6-4.5-4.2 6.1-.7L12 3Z" />
+            </svg>
+          </span>
+          <span class="orb-label">Star map</span>
         </button>
       </nav>
 
@@ -137,6 +147,33 @@
         id="map-frame"
         title="Map of areas with low light pollution"
         class="h-[calc(100%-3rem)] w-full bg-night"
+      ></iframe>
+    </dialog>
+
+    <!-- ============ STAR MAP (d3-celestial demo) ============ -->
+    <dialog
+      id="starmap-dialog"
+      aria-labelledby="starmap-title"
+      class="m-auto h-[min(88vh,800px)] w-[min(94vw,1100px)] overflow-hidden rounded-2xl bg-night p-0 text-moon backdrop:bg-black/70"
+    >
+      <div class="flex h-12 items-center justify-between border-b border-moon/15 px-4">
+        <p id="starmap-title" class="font-medium">Interactive star map</p>
+        <div class="flex items-center gap-4 text-sm">
+          <a href="https://ofrohn.github.io/celestial-demo/location.html" target="_blank" rel="noopener" class="text-aurora underline underline-offset-4">Open in new tab</a>
+          <button
+            type="button"
+            id="starmap-close"
+            aria-label="Close star map"
+            class="flex size-8 items-center justify-center rounded-md border border-moon/30 hover:border-aurora hover:text-aurora"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+      <iframe
+        id="starmap-frame"
+        title="Interactive star map by location"
+        class="h-[calc(100%-3rem)] w-full bg-white"
       ></iframe>
     </dialog>
   </body>
