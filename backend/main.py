@@ -20,7 +20,8 @@ if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 db = firestore.client()
 
-gemini = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+_gemini_key = os.getenv("GEMINI_API_KEY")
+gemini = genai.Client(api_key=_gemini_key) if _gemini_key else None
 
 app = FastAPI()
 
