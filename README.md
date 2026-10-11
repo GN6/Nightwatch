@@ -1,11 +1,11 @@
 # Nightwatch
 
 ## Requirements
-- Make 3.81
+- Make 3.81+
 - Python 3.9+
-- A Google Cloud project with the Earth Engine API enabled and registered
+- A Google Cloud project with the [Earth Engine API](https://console.cloud.google.com/earth-engine/) enabled and registered
   for Earth Engine access
-- A CARTO basemap API key
+- A [CARTO basemap API](https://carto.com/basemaps/apikey/) key
 
 ## Setup
 
