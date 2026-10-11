@@ -12,7 +12,8 @@
   /* Shooting star: crosses the screen during the first ~14% of the cycle,
      then stays hidden until the loop repeats. Set the cycle length with
      animation-duration on each element. */
-  --animate-shoot: shoot 24s linear infinite;
+  /* --animate-shoot: shoot 24s linear infinite; */
+  --animate-shoot: shoot 24s linear infinite backwards;
   @keyframes shoot {
     0%   { transform: translate(-20vw, 0) rotate(20deg); opacity: 0; }
     2%   { opacity: 1; }
