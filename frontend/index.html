@@ -17,35 +17,36 @@
     <main
       class="relative min-h-screen overflow-hidden bg-[radial-gradient(ellipse_at_30%_20%,#1b2457_0%,#0b1026_55%,#05070f_100%)]"
     >
-      <!-- ============ BACKGROUND GIF PLACEHOLDERS ============
-           To use a real GIF, swap a slot for:
-           <img src="/gifs/your-file.gif" alt="" class="absolute ... " />
-           Keep alt="" since they're decorative. -->
-      <div aria-hidden="true" class="pointer-events-none absolute inset-0">
+      <!-- ============ BACKGROUND IMAGES ============
+           Decorative only, so every image has alt="" and sits in an
+           aria-hidden, click-through layer. Adjust position (top/left/right/
+           bottom) and size (w-*) on each <img> to taste. Classes like
+           "hidden sm:block" hide an image on small screens. -->
+      <div aria-hidden="true" class="pointer-events-none absolute inset-0 select-none">
         <!-- Shooting stars: fly across periodically. Different durations and
              delays keep them from syncing up. -->
-        <div class="absolute left-0 top-[8%] motion-reduce:hidden">
-          <div class="gif-slot h-12 w-24 animate-shoot" style="animation-duration: 22s; animation-delay: 3s">shooting star</div>
-        </div>
-        <div class="absolute left-0 top-[35%] motion-reduce:hidden">
-          <div class="gif-slot h-12 w-24 animate-shoot" style="animation-duration: 31s; animation-delay: 12s">shooting star</div>
-        </div>
-        <div class="absolute left-0 top-[60%] motion-reduce:hidden">
-          <div class="gif-slot h-12 w-24 animate-shoot" style="animation-duration: 27s; animation-delay: 20s">shooting star</div>
-        </div>
+        <img src="/src/assets/shooting_star.png" alt="" draggable="false" class="absolute left-0 top-[8%] w-20 animate-shoot motion-reduce:hidden sm:w-24" style="animation-duration: 22s; animation-delay: 3s" />
+        <img src="/src/assets/shooting_star.png" alt="" draggable="false" class="absolute left-0 top-[35%] w-16 animate-shoot motion-reduce:hidden sm:w-20" style="animation-duration: 31s; animation-delay: 12s" />
+        <img src="/src/assets/shooting_star.png" alt="" draggable="false" class="absolute left-0 top-[60%] w-24 animate-shoot motion-reduce:hidden sm:w-28" style="animation-duration: 27s; animation-delay: 20s" />
 
-        <!-- Constellations -->
-        <div class="gif-slot absolute right-[18%] top-[9%] hidden h-28 w-40 sm:flex">constellation</div>
-        <div class="gif-slot absolute bottom-[14%] left-[40%] h-28 w-40">constellation</div>
+        <!-- Moon and galaxy -->
+        <img src="/src/assets/moon.png" alt="" draggable="false" class="absolute right-[18%] top-[9%] hidden w-24 sm:block" />
+        <img src="/src/assets/galaxy.png" alt="" draggable="false" class="absolute bottom-[14%] left-[40%] w-44" />
 
         <!-- Planets -->
-        <div class="gif-slot absolute left-[7%] top-[44%] hidden size-24 rounded-full sm:flex">planet</div>
-        <div class="gif-slot absolute bottom-[8%] right-[10%] size-28 rounded-full">planet</div>
+        <img src="/src/assets/planet1.png" alt="" draggable="false" class="absolute left-[7%] top-[44%] hidden w-28 sm:block" />
+        <img src="/src/assets/planet2.png" alt="" draggable="false" class="absolute bottom-[8%] right-[10%] w-28 sm:w-32" />
 
         <!-- Stars -->
-        <div class="gif-slot absolute left-[38%] top-[6%] size-16">stars</div>
-        <div class="gif-slot absolute right-[32%] top-[64%] hidden size-16 md:flex">stars</div>
-        <div class="gif-slot absolute left-[22%] top-[24%] hidden size-14 md:flex">stars</div>
+        <img src="/src/assets/star_blue.png" alt="" draggable="false" class="absolute left-[38%] top-[6%] w-12" />
+        <img src="/src/assets/star_green.png" alt="" draggable="false" class="absolute right-[32%] top-[64%] hidden w-12 md:block" />
+        <img src="/src/assets/star_purple.png" alt="" draggable="false" class="absolute left-[22%] top-[24%] hidden w-10 md:block" />
+        <img src="/src/assets/star_yellow.png" alt="" draggable="false" class="absolute bottom-[30%] left-[12%] hidden w-10 md:block" />
+
+        <!-- Asteroids -->
+        <img src="/src/assets/asteroid1.png" alt="" draggable="false" class="absolute bottom-[18%] right-[24%] hidden w-20 sm:block" />
+        <img src="/src/assets/asteroid2.png" alt="" draggable="false" class="absolute bottom-[10%] left-[26%] w-10 sm:w-12" />
+        <img src="/src/assets/asteroid3.png" alt="" draggable="false" class="absolute right-[6%] top-[14%] hidden w-14 sm:block" />
       </div>
 
       <!-- ============ NAV BUTTONS (scattered) ============ -->
