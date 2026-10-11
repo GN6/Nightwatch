@@ -1,4 +1,6 @@
 import '../style.css'
+import './profile.js'
+import './shared.js'
 
 const SITE_URL = 'https://www.astronomy.com/tags/sky-this-week/'
 

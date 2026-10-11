@@ -1,13 +1,14 @@
 import os, time, json, re
 import httpx, feedparser
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException, Header
+from fastapi import FastAPI, HTTPException, Header, Depends
+from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 import firebase_admin
 from firebase_admin import credentials, firestore, auth
 from google import genai
 from google.genai import types
+import secrets
 
 load_dotenv()
 
@@ -33,9 +34,6 @@ app.add_middleware(
 
 # ---------- user data ----------
 
-class SaveRequest(BaseModel):
-    constellation_name: str
-
 def verify_user_token(id_token):
     try:
         return auth.verify_id_token(id_token)["uid"]
@@ -43,31 +41,102 @@ def verify_user_token(id_token):
         print(f"Error verifying token: {e}")
         return None
 
-def save_favorite_constellation(user_id, constellation_name):
-    try:
-        db.collection("users").document(user_id).set({
-            "savedConstellations": firestore.ArrayUnion([constellation_name]),
-            "savedAt": firestore.SERVER_TIMESTAMP,
-        }, merge=True)
-        return True
-    except Exception as e:
-        print(f"Error saving constellation: {e}")
-        return False
-
-def get_user_profile(user_id):
-    doc = db.collection("users").document(user_id).get()
-    return doc.to_dict() if doc.exists else None
-
-@app.post("/api/save")
-def api_save_constellation(request: SaveRequest, authorization: str = Header(None)):
+def current_user(authorization: str = Header(None)) -> str:
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing auth token")
-    user_id = verify_user_token(authorization.split("Bearer ")[1])
-    if not user_id:
+    uid = verify_user_token(authorization.split("Bearer ")[1])
+    if not uid:
         raise HTTPException(status_code=401, detail="Invalid token")
-    if save_favorite_constellation(user_id, request.constellation_name):
-        return {"status": "success", "message": f"{request.constellation_name} saved!"}
-    raise HTTPException(status_code=500, detail="Database error")
+    return uid
+
+def user_ref(uid):
+    return db.collection("users").document(uid)
+
+class SaveRequest(BaseModel):
+    constellation_name: str = Field(min_length=1, max_length=40)
+
+class PhotoRequest(BaseModel):
+    constellation_name: str = Field(min_length=1, max_length=40)
+    caption: str = Field(default="", max_length=140)
+    image: str  # small JPEG data URL, resized in the browser
+
+@app.post("/api/save")
+def api_save(req: SaveRequest, uid: str = Depends(current_user)):
+    user_ref(uid).set({
+        "savedConstellations": firestore.ArrayUnion([req.constellation_name]),
+        "savedAt": firestore.SERVER_TIMESTAMP,
+    }, merge=True)
+    return {"status": "success"}
+
+@app.post("/api/unsave")
+def api_unsave(req: SaveRequest, uid: str = Depends(current_user)):
+    user_ref(uid).set({
+        "savedConstellations": firestore.ArrayRemove([req.constellation_name]),
+    }, merge=True)
+    return {"status": "success"}
+
+@app.get("/api/profile")
+def api_profile(uid: str = Depends(current_user)):
+    doc = user_ref(uid).get()
+    profile = doc.to_dict() if doc.exists else {}
+    photos = []
+    query = (user_ref(uid).collection("photos")
+             .order_by("createdAt", direction=firestore.Query.DESCENDING).limit(30))
+    for d in query.stream():
+        p = d.to_dict()
+        photos.append({"id": d.id, "constellation": p.get("constellation", ""),
+                       "caption": p.get("caption", ""), "image": p.get("image", "")})
+    return {"constellations": profile.get("savedConstellations", []), "photos": photos}
+
+@app.post("/api/photos")
+def api_add_photo(req: PhotoRequest, uid: str = Depends(current_user)):
+    if not req.image.startswith("data:image/jpeg;base64,") or len(req.image) > 400_000:
+        raise HTTPException(status_code=400, detail="Image must be a small JPEG")
+    _, ref = user_ref(uid).collection("photos").add({
+        "constellation": req.constellation_name,
+        "caption": req.caption,
+        "image": req.image,
+        "createdAt": firestore.SERVER_TIMESTAMP,
+    })
+    return {"id": ref.id}
+
+@app.delete("/api/photos/{photo_id}")
+def api_delete_photo(photo_id: str, uid: str = Depends(current_user)):
+    user_ref(uid).collection("photos").document(photo_id).delete()
+    return {"status": "success"}
+
+@app.post("/api/share")
+def api_share(enable: bool = True, uid: str = Depends(current_user)):
+    snap = user_ref(uid).get()
+    data = snap.to_dict() if snap.exists else {}
+    if enable:
+        share_id = data.get("shareId") or secrets.token_urlsafe(8)
+        user_ref(uid).set({"shareId": share_id}, merge=True)
+        return {"shareId": share_id}
+    user_ref(uid).set({"shareId": firestore.DELETE_FIELD}, merge=True)
+    return {"shareId": None}
+
+@app.get("/api/shared/{share_id}")  # public: no login needed
+def api_shared(share_id: str):
+    docs = list(db.collection("users").where("shareId", "==", share_id).limit(1).stream())
+    if not docs:
+        raise HTTPException(status_code=404, detail="Profile not found")
+    doc = docs[0]
+    data = doc.to_dict()
+    try:
+        name = auth.get_user(doc.id).display_name or ""
+    except Exception:
+        name = ""
+    photos = []
+    query = (doc.reference.collection("photos")
+             .order_by("createdAt", direction=firestore.Query.DESCENDING).limit(30))
+    for d in query.stream():
+        p = d.to_dict()
+        photos.append({"constellation": p.get("constellation", ""),
+                       "caption": p.get("caption", ""), "image": p.get("image", "")})
+    return {"displayName": name,
+            "constellations": [c for c in data.get("savedConstellations", []) if c],
+            "photos": photos}
 
 # ---------- sky events + Gemini ----------
 
