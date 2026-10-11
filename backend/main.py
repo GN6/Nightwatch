@@ -72,7 +72,7 @@ def api_save_constellation(request: SaveRequest, authorization: str = Header(Non
 # ---------- sky events + Gemini ----------
 
 FEED_URL = "https://www.astronomy.com/tags/sky-this-week/feed/"
-MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite"]  # confirm current names in AI Studio
+MODELS = ["gemini-3.8-flash", "gemini-3.8-flash-lite"]
 _cache = {"t": 0, "items": [], "ok": False}
 
 def summarize(items):
@@ -94,6 +94,8 @@ def summarize(items):
                     return [str(s) for s in summaries]
             except Exception as e:
                 print(f"Gemini {model} attempt {attempt + 1} failed: {e}")
+                if "NOT_FOUND" in str(e):
+                    break  # wrong model name, so skip to the next model
                 time.sleep(1.5 * (attempt + 1))
     return None
 
