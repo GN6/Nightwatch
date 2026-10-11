@@ -126,7 +126,6 @@ function setupFrameDialog({ openId, closeId, dialogId, frameId, url }) {
   const dlg = document.getElementById(dialogId)
   const frame = document.getElementById(frameId)
 
-<<<<<<< HEAD
 document.getElementById('map-open').addEventListener('click', () => {
   if (!mapFrame.getAttribute('src')) mapFrame.src = MAP_URL
   mapDialog.showModal()
@@ -134,33 +133,4 @@ document.getElementById('map-open').addEventListener('click', () => {
 document.getElementById('map-close').addEventListener('click', () => mapDialog.close())
 mapDialog.addEventListener('click', (e) => {
   if (e.target === mapDialog) mapDialog.close()
-=======
-  document.getElementById(openId).addEventListener('click', () => {
-    if (!frame.getAttribute('src')) frame.src = url // load on first open
-    dlg.showModal()
-  })
-
-  document.getElementById(closeId).addEventListener('click', () => dlg.close())
-
-  // Clicking the dimmed backdrop closes the dialog
-  dlg.addEventListener('click', (e) => {
-    if (e.target === dlg) dlg.close()
-  })
-}
-
-setupFrameDialog({
-  openId: 'map-open',
-  closeId: 'map-close',
-  dialogId: 'map-dialog',
-  frameId: 'map-frame',
-  url: '/dark-sky-map.html',
-})
-
-setupFrameDialog({
-  openId: 'starmap-open',
-  closeId: 'starmap-close',
-  dialogId: 'starmap-dialog',
-  frameId: 'starmap-frame',
-  url: 'https://ofrohn.github.io/celestial-demo/location.html',
->>>>>>> 6a79cb129a32adc32b2c577c6a4a82241ec43dde
-})
+})}
