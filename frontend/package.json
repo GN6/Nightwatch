@@ -20,6 +20,7 @@
     "@react-three/drei": "^10.7.9",
     "@react-three/fiber": "^9.8.1",
     "@tailwindcss/vite": "^4.3.3",
+    "firebase": "^13.0.0",
     "tailwindcss": "^4.3.3",
     "three": "^0.186.1"
   }
